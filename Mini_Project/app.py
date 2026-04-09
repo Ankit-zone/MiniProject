@@ -33,7 +33,9 @@ FEATURES = [
 # ------------------ LOAD DATA ------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("novagen_dataset.csv")
+    import os
+    path = os.path.join(os.path.dirname(__file__), "novagen_dataset.csv")
+    df = pd.read_csv(path)
     return df[FEATURES]
 
 df = load_data()
