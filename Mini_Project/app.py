@@ -103,7 +103,9 @@ elif page == "📊 Analysis":
 elif page == "🤖 Prediction":
     st.title("🤖 Health Risk Prediction")
 
-    model = pickle.load(open("model.pkl", "rb"))
+    import os
+    model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
+    model = pickle.load(open(model_path, "rb"))
 
     st.markdown("### 📝 Enter Patient Details")
 
