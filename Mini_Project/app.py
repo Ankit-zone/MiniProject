@@ -43,7 +43,7 @@ st.sidebar.title("📌 Dashboard Menu")
 page = st.sidebar.radio("", ["🏠 Home", "📊 Analysis", "🤖 Prediction"])
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Developed by Ankit 🚀")
+st.sidebar.caption("Developed by Ankit, Anurag, Aman 🚀")
 
 # ------------------ HOME ------------------
 if page == "🏠 Home":
