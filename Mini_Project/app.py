@@ -135,4 +135,7 @@ elif page == "🤖 Prediction":
         with st.spinner("Analyzing..."):
             prediction = model.predict(input_data)
 
-        st.success(f"✅ Prediction Result: {prediction[0]}")
+        if prediction[0] == 1:
+            st.error("⚠️ High Health Risk")
+        else:
+            st.success("✅ Low Health Risk")
