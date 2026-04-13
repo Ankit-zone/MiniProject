@@ -113,32 +113,44 @@ elif page == "📊 Analysis":
 
     # ---------------- DASHBOARD 2 ----------------
     with tab2:
-        st.subheader("📈 Advanced Dashboard")
+    st.subheader("📈 Simple Insights Dashboard")
 
-        # Pairwise scatter
-        st.markdown("### 🔍 Multi-Feature Comparison")
+    # ---------------- TOP SECTION ----------------
+    st.markdown("### 📊 Key Feature Distribution")
 
-        selected_features = st.multiselect(
-            "Select Features",
-            FEATURES,
-            default=FEATURES[:3]
-        )
+    col1, col2 = st.columns(2)
 
-        if len(selected_features) >= 2:
-            fig = px.scatter_matrix(df, dimensions=selected_features)
-            st.plotly_chart(fig, use_container_width=True)
-
-        st.markdown("---")
-
-        # Feature comparison
-        st.markdown("### 📊 Feature Comparison")
-
-        feature1 = st.selectbox("Feature 1", FEATURES, key="f1")
-        feature2 = st.selectbox("Feature 2", FEATURES, key="f2")
-
-        fig = px.line(df, y=[feature1, feature2], title="Feature Comparison")
+    with col1:
+        fig = px.histogram(df, x="BMI", title="BMI Distribution")
         st.plotly_chart(fig, use_container_width=True)
 
+    with col2:
+        fig = px.histogram(df, x="Blood_Pressure", title="Blood Pressure Distribution")
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
+
+    # ---------------- MIDDLE SECTION ----------------
+    st.markdown("### 🔍 Relationship Between Important Features")
+
+    fig = px.scatter(
+        df,
+        x="BMI",
+        y="Blood_Pressure",
+        title="BMI vs Blood Pressure",
+        opacity=0.6
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
+
+    # ---------------- BOTTOM SECTION ----------------
+    st.markdown("### 📌 Select Any Feature to Explore")
+
+    feature = st.selectbox("Choose Feature", FEATURES)
+
+    fig = px.box(df, y=feature, title=f"{feature} Overview")
+    st.plotly_chart(fig, use_container_width=True)
 # ------------------ PREDICTION ------------------
 elif page == "🤖 Prediction":
     st.title("🤖 Health Risk Prediction")
