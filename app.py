@@ -78,7 +78,7 @@ elif page == "📊 Analysis":
         y_axis = st.selectbox("Select Y-axis", FEATURES)
 
     fig, ax = plt.subplots()
-    sns.scatterplot(data=df, x=x_axis, y=y_axis, ax=ax)
+    sns.regplot(data=df, x=x_axis, y=y_axis, ax=ax, scatter_kws={"alpha":0.3})
     st.pyplot(fig)
 
     st.markdown("---")
@@ -103,7 +103,7 @@ elif page == "📊 Analysis":
 elif page == "🤖 Prediction":
     st.title("🤖 Health Risk Prediction")
 
-    # Load model safely
+    # Load model
     model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
     model = pickle.load(open(model_path, "rb"))
 
@@ -131,20 +131,30 @@ elif page == "🤖 Prediction":
 
     st.markdown("---")
 
-    # Prediction button
     if st.button("🚀 Predict", use_container_width=True):
 
+        # ---------------- ML Prediction ----------------
         prediction = model.predict(input_data)
         proba = model.predict_proba(input_data)[0][1]
 
-        # Display result
-        if prediction[0] == 1:
-            st.error(f"⚠️ High Health Risk ({proba*100:.2f}%)")
+        # ---------------- RULE-BASED LOGIC ----------------
+        if bmi >= 30 or bp >= 140:
+            rule_risk = "High Risk"
+            st.error("🔴 Rule-Based: High Health Risk")
+        elif (25 <= bmi < 30) or (120 <= bp < 140):
+            rule_risk = "Moderate Risk"
+            st.warning("🟡 Rule-Based: Moderate Risk")
         else:
-            st.success(f"✅ Low Health Risk ({(1-proba)*100:.2f}%)")
+            rule_risk = "Low Risk"
+            st.success("🟢 Rule-Based: Low Risk")
 
-        # Extra professional touch
-        st.metric(
-            "Risk Level",
-            "High Risk" if prediction[0] == 1 else "Low Risk"
-        )
+        st.markdown("---")
+
+        # ---------------- ML RESULT ----------------
+        if prediction[0] == 1:
+            st.error(f"🤖 ML Prediction: High Risk ({proba*100:.2f}%)")
+        else:
+            st.success(f"🤖 ML Prediction: Low Risk ({(1-proba)*100:.2f}%)")
+
+        # ---------------- FINAL METRIC ----------------
+        st.metric("Final Risk Level", rule_risk)
