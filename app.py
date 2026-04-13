@@ -65,39 +65,79 @@ if page == "🏠 Home":
 
 # ------------------ ANALYSIS ------------------
 elif page == "📊 Analysis":
-    st.title("📊 Data Analysis & Visualization")
+    st.title("📊 Interactive Data Dashboard")
 
-    st.markdown("### 🔍 Feature Relationships")
+    tab1, tab2 = st.tabs(["📊 Overview Dashboard", "📈 Advanced Dashboard"])
 
-    col1, col2 = st.columns(2)
+    # ---------------- DASHBOARD 1 ----------------
+    with tab1:
+        st.subheader("📊 Overview Dashboard")
 
-    with col1:
-        x_axis = st.selectbox("Select X-axis", FEATURES)
+        col1, col2 = st.columns(2)
 
-    with col2:
-        y_axis = st.selectbox("Select Y-axis", FEATURES)
+        # Histogram
+        with col1:
+            feature = st.selectbox("Select Feature (Histogram)", FEATURES)
+            fig = px.histogram(df, x=feature, nbins=30, title=f"Distribution of {feature}")
+            st.plotly_chart(fig, use_container_width=True)
 
-    fig, ax = plt.subplots()
-    sns.regplot(data=df, x=x_axis, y=y_axis, ax=ax, scatter_kws={"alpha":0.3})
-    st.pyplot(fig)
+        # Box Plot
+        with col2:
+            fig = px.box(df, y=feature, title=f"Box Plot of {feature}")
+            st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("---")
+        st.markdown("---")
 
-    st.markdown("### 📈 Distribution")
+        # Scatter Plot
+        col3, col4 = st.columns(2)
 
-    column = st.selectbox("Select Feature", FEATURES)
+        with col3:
+            x_axis = st.selectbox("X-axis", FEATURES, key="x1")
 
-    fig, ax = plt.subplots()
-    sns.histplot(df[column], kde=True, ax=ax)
-    st.pyplot(fig)
+        with col4:
+            y_axis = st.selectbox("Y-axis", FEATURES, key="y1")
 
-    st.markdown("---")
+        fig = px.scatter(
+            df, x=x_axis, y=y_axis,
+            title=f"{x_axis} vs {y_axis}",
+            opacity=0.6
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("### 🔥 Correlation Heatmap")
+        # Heatmap
+        st.subheader("🔥 Correlation Heatmap")
+        corr = df.corr()
+        fig = px.imshow(corr, text_auto=True, aspect="auto", color_continuous_scale="RdBu")
+        st.plotly_chart(fig, use_container_width=True)
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.heatmap(df.corr(), annot=True, cmap="coolwarm", ax=ax)
-    st.pyplot(fig)
+    # ---------------- DASHBOARD 2 ----------------
+    with tab2:
+        st.subheader("📈 Advanced Dashboard")
+
+        # Pairwise scatter
+        st.markdown("### 🔍 Multi-Feature Comparison")
+
+        selected_features = st.multiselect(
+            "Select Features",
+            FEATURES,
+            default=FEATURES[:3]
+        )
+
+        if len(selected_features) >= 2:
+            fig = px.scatter_matrix(df, dimensions=selected_features)
+            st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("---")
+
+        # Feature comparison
+        st.markdown("### 📊 Feature Comparison")
+
+        feature1 = st.selectbox("Feature 1", FEATURES, key="f1")
+        feature2 = st.selectbox("Feature 2", FEATURES, key="f2")
+
+        fig = px.line(df[[feature1, feature2]].reset_index(),
+                      title="Feature Comparison Over Index")
+        st.plotly_chart(fig, use_container_width=True)
 
 # ------------------ PREDICTION ------------------
 elif page == "🤖 Prediction":
