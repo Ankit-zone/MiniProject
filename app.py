@@ -136,8 +136,7 @@ elif page == "📊 Analysis":
         feature1 = st.selectbox("Feature 1", FEATURES, key="f1")
         feature2 = st.selectbox("Feature 2", FEATURES, key="f2")
 
-        fig = px.line(df[[feature1, feature2]].reset_index(),
-                      title="Feature Comparison Over Index")
+        fig = px.line(df, y=[feature1, feature2], title="Feature Comparison")
         st.plotly_chart(fig, use_container_width=True)
 
 # ------------------ PREDICTION ------------------
