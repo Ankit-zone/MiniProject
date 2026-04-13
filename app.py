@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import os
+import plotly.express as px
 
 # ------------------ PAGE CONFIG ------------------
 st.set_page_config(
