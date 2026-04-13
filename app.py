@@ -113,44 +113,44 @@ elif page == "📊 Analysis":
 
     # ---------------- DASHBOARD 2 ----------------
     with tab2:
-    st.subheader("📈 Simple Insights Dashboard")
-
-    # ---------------- TOP SECTION ----------------
-    st.markdown("### 📊 Key Feature Distribution")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        fig = px.histogram(df, x="BMI", title="BMI Distribution")
+        st.subheader("📈 Simple Insights Dashboard")
+    
+        # ---------------- TOP SECTION ----------------
+        st.markdown("### 📊 Key Feature Distribution")
+    
+        col1, col2 = st.columns(2)
+    
+        with col1:
+            fig = px.histogram(df, x="BMI", title="BMI Distribution")
+            st.plotly_chart(fig, use_container_width=True)
+    
+        with col2:
+            fig = px.histogram(df, x="Blood_Pressure", title="Blood Pressure Distribution")
+            st.plotly_chart(fig, use_container_width=True)
+    
+        st.markdown("---")
+    
+        # ---------------- MIDDLE SECTION ----------------
+        st.markdown("### 🔍 Relationship Between Important Features")
+    
+        fig = px.scatter(
+            df,
+            x="BMI",
+            y="Blood_Pressure",
+            title="BMI vs Blood Pressure",
+            opacity=0.6
+        )
         st.plotly_chart(fig, use_container_width=True)
-
-    with col2:
-        fig = px.histogram(df, x="Blood_Pressure", title="Blood Pressure Distribution")
+    
+        st.markdown("---")
+    
+        # ---------------- BOTTOM SECTION ----------------
+        st.markdown("### 📌 Select Any Feature to Explore")
+    
+        feature = st.selectbox("Choose Feature", FEATURES)
+    
+        fig = px.box(df, y=feature, title=f"{feature} Overview")
         st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("---")
-
-    # ---------------- MIDDLE SECTION ----------------
-    st.markdown("### 🔍 Relationship Between Important Features")
-
-    fig = px.scatter(
-        df,
-        x="BMI",
-        y="Blood_Pressure",
-        title="BMI vs Blood Pressure",
-        opacity=0.6
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("---")
-
-    # ---------------- BOTTOM SECTION ----------------
-    st.markdown("### 📌 Select Any Feature to Explore")
-
-    feature = st.selectbox("Choose Feature", FEATURES)
-
-    fig = px.box(df, y=feature, title=f"{feature} Overview")
-    st.plotly_chart(fig, use_container_width=True)
 # ------------------ PREDICTION ------------------
 elif page == "🤖 Prediction":
     st.title("🤖 Health Risk Prediction")
